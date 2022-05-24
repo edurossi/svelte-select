@@ -490,7 +490,12 @@
                 activeValue = undefined;
                 break;
             case 'Tab':
-                if (!listOpen) isFocused = false;
+                if (!listOpen) {
+                  if (isFocused) {
+                    dispatch('blur');
+                  }
+                  isFocused = false;
+                }
                 break;
             case 'Backspace':
                 if (!isMulti || filterText.length > 0) return;
@@ -542,6 +547,9 @@
             event.path && event.path.length > 0 ? event.path[0] : event.target;
         if (container.contains(eventTarget) || container.contains(event.relatedTarget)) {
             return;
+        }
+        if (isFocused) {
+          dispatch('blur');
         }
         isFocused = false;
         listOpen = false;
